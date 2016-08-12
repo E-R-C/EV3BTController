@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".GUI.RemoteControl"
+    tools:showIn="@layout/activity_remote_control">
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/forward"
+        android:id="@+id/ForwardButton"
+        android:layout_marginTop="60dp"
+        android:checked="false"
+        android:textOff="@string/forward"
+        android:textOn="@string/forward"
+        android:background="@android:color/holo_orange_dark"
+        android:layout_below="@+id/currentDirectionText"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/current_direction"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/stop"
+        android:id="@+id/currentDirectionText"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/LeftButton"
+        android:textOff="@string/left"
+        android:textOn="@string/left"
+        android:background="@android:color/holo_orange_dark"
+        android:layout_gravity="left"
+        android:layout_below="@+id/ForwardButton"
+        android:layout_toStartOf="@+id/textView"
+        android:layout_marginTop="60dp" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/right"
+        android:id="@+id/RightButton"
+        android:textOff="@string/right"
+        android:textOn="@string/right"
+        android:background="@android:color/holo_orange_dark"
+        android:layout_alignTop="@+id/LeftButton"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/backward"
+        android:id="@+id/ReverseButton"
+        android:background="@android:color/holo_orange_dark"
+        android:layout_below="@+id/StopButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:textOn="@string/backward"
+        android:textOff="@string/backward" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/StopButton"
+        android:textOff="@string/stop"
+        android:textOn="@string/stop"
+        android:background="@android:color/holo_orange_dark"
+        android:layout_below="@+id/ForwardButton"
+        android:layout_alignLeft="@+id/ForwardButton"
+        android:layout_alignStart="@+id/ForwardButton"
+        android:layout_marginTop="60dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/done_training"
+        android:id="@+id/SwitchModeButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:singleLine="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/delay"
+        android:id="@+id/delaytext"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/_0"
+        android:id="@+id/deleayInMilliTXT"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/delaytext"
+        android:layout_toEndOf="@+id/delaytext" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/live_preview"
+        android:id="@+id/LivePreview"
+        android:layout_alignTop="@+id/currentDirectionText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/average_delay"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/delaytext"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/_0"
+        android:id="@+id/averageDelayValue"
+        android:layout_below="@+id/deleayInMilliTXT"
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_toEndOf="@+id/textView2" />
+
+</RelativeLayout>

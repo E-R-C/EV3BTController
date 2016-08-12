@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".GUI.ConnectPage"
+    tools:showIn="@layout/activity_connect_page">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/LeJOS_address"
+        android:id="@+id/LejosAddress"
+        android:textSize="24sp"
+        android:layout_marginTop="133dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ipAddress"
+        android:hint="@string/_10_0_1_1"
+        android:layout_below="@+id/LejosAddress"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="false"
+        android:layout_centerHorizontal="true"
+        android:textIsSelectable="true"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/connect"
+        android:id="@+id/ConnectButton"
+        android:background="@android:color/holo_orange_dark"
+        android:layout_above="@+id/toControlPage"
+        android:layout_alignLeft="@+id/LejosAddress"
+        android:layout_alignStart="@+id/LejosAddress"
+        android:layout_alignRight="@+id/LejosAddress"
+        android:layout_alignEnd="@+id/LejosAddress" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/toControlPage"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/abc_ic_go_search_api_material" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Ev3Name"
+        android:hint="@string/ev3_name"
+        android:textIsSelectable="true"
+        android:layout_alignBottom="@+id/LejosAddress"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="41dp"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/ev3_name"
+        android:id="@+id/textView3"
+        android:layout_above="@+id/Ev3Name"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_centerHorizontal="true"
+        android:textSize="24sp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/BSOCNumber"
+        android:layout_below="@+id/ipAddress"
+        android:layout_marginTop="40dp"
+        android:hint="@string/bsoc_number"
+        android:textAlignment="center"
+        android:layout_alignRight="@+id/ipAddress"
+        android:layout_alignEnd="@+id/ConnectButton"
+        android:layout_alignLeft="@+id/ipAddress"
+        android:layout_alignStart="@id/LejosAddress" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:ems="10"
+        android:id="@+id/shrinkFactorNumber"
+        android:hint="Shrink Factor"
+        android:layout_below="@+id/BSOCNumber"
+        android:layout_alignRight="@+id/BSOCNumber"
+        android:layout_alignEnd="@+id/BSOCNumber"
+        android:layout_alignLeft="@+id/ConnectButton"
+        android:layout_alignStart="@+id/LejosAddress" />
+
+</RelativeLayout>
