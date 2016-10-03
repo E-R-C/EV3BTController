@@ -41,20 +41,11 @@
         android:text="@string/connect"
         android:id="@+id/ConnectButton"
         android:background="@android:color/holo_orange_dark"
-        android:layout_above="@+id/toControlPage"
         android:layout_alignLeft="@+id/LejosAddress"
         android:layout_alignStart="@+id/LejosAddress"
         android:layout_alignRight="@+id/LejosAddress"
-        android:layout_alignEnd="@+id/LejosAddress" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/toControlPage"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/abc_ic_go_search_api_material" />
+        android:layout_alignEnd="@+id/LejosAddress"
+        android:layout_alignParentBottom="true" />
 
     <EditText
         android:layout_width="wrap_content"

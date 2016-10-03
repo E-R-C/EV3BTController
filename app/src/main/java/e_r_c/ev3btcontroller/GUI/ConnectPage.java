@@ -22,13 +22,6 @@ public class ConnectPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect_page);
         setupUI();
-        toControl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), RemoteControl.class);
-                startActivity(i);
-            }
-        });
 
         connectButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -53,7 +46,7 @@ public class ConnectPage extends AppCompatActivity {
                         shrink = Integer.parseInt(shrinkFactorTxt.getText().toString());
                     } else {
                         shrink = 8;
-                        toaster("Invalid shrink (must be 2 or divisible by 4) Value Automatically set to "
+                        toaster("Invalid shrink (must be 2 or divisible by 4 or 10) Value Automatically set to "
                                 + shrink);
                     }
                     i.putExtra("shrinkNum",shrink);
@@ -70,7 +63,6 @@ public class ConnectPage extends AppCompatActivity {
     private void setupUI(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toControl = (Button) findViewById(R.id.toControlPage);
         connectButton = (Button) findViewById(R.id.ConnectButton);
         ev3NameTxt = (EditText) findViewById(R.id.Ev3Name);
         ipAddressTxt = (EditText) findViewById(R.id.ipAddress);
@@ -83,4 +75,5 @@ public class ConnectPage extends AppCompatActivity {
         }
         return ipAddressTxt.getText().toString();
     }
+
 }

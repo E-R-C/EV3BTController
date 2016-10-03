@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +24,10 @@ import android.widget.Toast;
 
 import org.joda.time.LocalDateTime;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -30,14 +37,16 @@ import e_r_c.ev3btcontroller.net.ActionSelector.DateTimeInt;
 import e_r_c.ev3btcontroller.net.ActionSelector.UpdateListener;
 
 public class RemoteControl extends AppCompatActivity implements UpdateListener<ActionSelectorReply>{
-    Button left, right, forward, reverse, stop, livePrevButton, modeButton, BSOCButton;
+    Button left, right, forward, reverse, stop, livePrevButton, modeButton, BSOCButton, saveDelaysButton;
     ClientSenderWrapper pHandler;
-    String delayInmilliValue = "0";
+    boolean timerStarted;
+    int receivedMessages = 0;
     TextView delayInmilli, currentDirectionText, averageDelayValue;
     private int sentMilli, recievedMilli, allMilli = 0;
     ArrayList<DateTimeInt> times = new ArrayList<>();
     AlertDialog ad;
-    ArrayList<Integer> delayCollection = new ArrayList<>();
+    ArrayList<Integer> delayCollection;
+    Handler handler = new Handler();
 
 
     @Override
@@ -46,6 +55,7 @@ public class RemoteControl extends AppCompatActivity implements UpdateListener<A
         setContentView(R.layout.activity_remote_control);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        delayCollection = new ArrayList<>();
         setupButtons();
         pHandler = new ClientSenderWrapper();
         pHandler.addUpdateListener(this);
@@ -53,7 +63,7 @@ public class RemoteControl extends AppCompatActivity implements UpdateListener<A
         int bsocNum = extras.getInt("BSOCNum");
         int shrinkNum = extras.getInt("shrinkNum");
         pHandler.sendFirstMessage(bsocNum, shrinkNum);
-
+        delayCollection.clear();
     }
 
     private void popUpList(ArrayList<DateTimeInt> list){
@@ -80,6 +90,14 @@ public class RemoteControl extends AppCompatActivity implements UpdateListener<A
     private void toaster(String message){
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
+    private void controlButtonsSet(boolean b){
+        left.setEnabled(b);
+        right.setEnabled(b);
+        forward.setEnabled(b);
+        reverse.setEnabled(b);
+        stop.setEnabled(true);
+    }
+
     private void setupButtons(){
         left = (Button) findViewById(R.id.LeftButton);
         right = (Button) findViewById(R.id.RightButton);
@@ -91,6 +109,14 @@ public class RemoteControl extends AppCompatActivity implements UpdateListener<A
         livePrevButton = (Button) findViewById(R.id.LivePreview);
         currentDirectionText = (TextView) findViewById(R.id.currentDirectionText);
         averageDelayValue = (TextView) findViewById(R.id.averageDelayValue);
+        saveDelaysButton = (Button) findViewById(R.id.saveDelaysButton);
+        saveDelaysButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                saveDelaysToFile(delayCollection);
+            }
+        });
         left.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -121,6 +147,7 @@ public class RemoteControl extends AppCompatActivity implements UpdateListener<A
                 pHandler.sendLearnMove(stop.getText().toString());
             }
         });
+        controlButtonsSet(false);
         modeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -136,39 +163,73 @@ public class RemoteControl extends AppCompatActivity implements UpdateListener<A
         });
     }
 
+    private class UpdateTextView implements Runnable{
+        TextView tv;
+        String message;
+        public UpdateTextView(String message, TextView v){
+            this.message = message;
+            tv = v;
+        }
+        @Override
+        public void run() {
+            tv.setText(message);
+        }
+    }
+
     @Override
     public void report(ActionSelectorReply reply) {
         final ActionSelectorReply reply1 = reply;
         sentMilli = pHandler.getSentTime();
         if (reply.isPulse()){
+            int received = LocalDateTime.now().getMillisOfDay();
+            int diff = received - sentMilli;
+            System.out.println(diff);
+            if (diff > 0){
+                runOnUiThread(new UpdateTextView(msFormatter(diff),delayInmilli));
+                allMilli += diff;
+                delayCollection.add(diff);
+                if (delayCollection.size() > 1){
+                    int avgDelay = (allMilli - delayCollection.get(0))/delayCollection.size()-1;
+                    runOnUiThread(new UpdateTextView(msFormatter(avgDelay),averageDelayValue));
+                }
+            }
+
+        }
+
+        if (delayCollection.size() == 1 ){
+            System.out.println("Looper called");
+            Looper.prepare();
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    int received = LocalDateTime.now().getMillisOfDay();
-                    int diff = received - sentMilli;
-                    System.out.println(diff);
-                    if (diff > 0){
-                        delayInmilli.setText(msFormatter(diff));
-                        allMilli += diff;
-                        delayCollection.add(diff);
-                        if (delayCollection.size() > 1){
-                            int avgDelay = (allMilli - delayCollection.get(0))/delayCollection.size()-1;
-                            averageDelayValue.setText(msFormatter(avgDelay));
-                        }
-                    }
-
+                    controlButtonsSet(true);
+                    System.out.println("Buttons set to enabled");
                 }
             };
             runOnUiThread(r);
         }
-        if (reply.getPulseMove() != null){
-            Runnable r = new Runnable() {
+        if (delayCollection.size() == 2 && !timerStarted) {
+            timerStarted = true;
+            System.out.println("Started Timer");
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    currentDirectionText.setText(reply1.getPulseMove().uiName());
+                    System.out.println("Hi");
+                    controlButtonsSet(false);
+                    pHandler.sendLearnMove(stop.getText().toString());
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            controlButtonsSet(true);
+                            saveDelaysToFile(delayCollection);
+                        }
+                    },2000);
                 }
-            };
-            runOnUiThread(r);
+            },120000);
+        }
+
+        if (reply.getPulseMove() != null){
+            runOnUiThread(new UpdateTextView(reply.getPulseMove().toString(),currentDirectionText));
         }
     }
 
@@ -250,5 +311,23 @@ public class RemoteControl extends AppCompatActivity implements UpdateListener<A
         return super.onOptionsItemSelected(item);
     }
 
-
+    private void saveDelaysToFile(ArrayList<Integer> delays ){
+        File file = new File(this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS),"DelayLogFile.txt");
+        try {
+            System.out.println("Writing");
+            FileWriter writer = new FileWriter(file);
+            writer.write("");
+            for (int i = 0; i < delays.size(); i++){
+                writer.write(delays.get(i).toString());
+                writer.write("\n");
+            }
+            writer.flush();
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Failed to Write!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

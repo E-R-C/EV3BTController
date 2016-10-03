@@ -23,4 +23,5 @@
     <string name="_0">0</string>
     <string name="live_preview">Live Preview</string>
     <string name="average_delay">Average Delay:</string>
+    <string name="save_delays">Save Delays</string>
 </resources>

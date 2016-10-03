@@ -32,8 +32,8 @@ public class UpdateThread extends Thread {
                 byte[] bytes = new byte[expectedBytes];
                 DatagramPacket incoming = new DatagramPacket(bytes, bytes.length);
                 sock.receive(incoming);
-                for (byte b: bytes) {System.out.print(b + " ");}
-                System.out.println();
+//                for (byte b: bytes) {System.out.print(b + " ");}
+//                System.out.println();
                 ActionSelectorReply reported = ActionSelectorReply.fromBytes(bytes);
                 for (UpdateListener<ActionSelectorReply> listener : listeners) {
                     listener.report(reported);
